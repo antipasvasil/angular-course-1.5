@@ -4,12 +4,15 @@
 
 export default config;
 
-config.$inject = ['$urlRouterProvider', '$stateProvider', '$locationProvider'];
+config.$inject = ['$urlRouterProvider', '$stateProvider', '$locationProvider','$httpProvider', 'ProfileServiceProvider'];
 
-function config ($urlRouterProvider, $stateProvider, $locationProvider) {
+function config ($urlRouterProvider, $stateProvider, $locationProvider, $httpProvider, ProfileServiceProvider) {
+
+    ProfileServiceProvider.loadProfile();
 
     /**
      * Setup hash bang URL's
+     *loggedIn
      */
     $locationProvider.html5Mode(false);
     $locationProvider.hashPrefix('!');
@@ -19,6 +22,8 @@ function config ($urlRouterProvider, $stateProvider, $locationProvider) {
      */
     $urlRouterProvider.when('', '/');
     $urlRouterProvider.otherwise('/');
+
+    $httpProvider.interceptors.push('loginInterceptor');
 
     $stateProvider.state("app", {
         abstract: true,
