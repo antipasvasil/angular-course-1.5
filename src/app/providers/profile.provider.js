@@ -3,7 +3,7 @@ ProfileService.$inject = ['$localStorageProvider'];
 /* @ngInject */
 export default ProfileService;
 
-function ProfileService ($localStorage) {
+function ProfileService ($localStorage, $timeout, $state) {
 
     var userProfileData = {};
 
@@ -14,6 +14,7 @@ function ProfileService ($localStorage) {
 
         userProfileData.loggedIn = $localStorage.get('loggedIn') || false;
         userProfileData.id = $localStorage.get('userId');
+
     };
 
     /***
@@ -25,7 +26,8 @@ function ProfileService ($localStorage) {
         return {
             isLoggedIn: isLoggedIn,
             setProfile: setProfile,
-            getProfile: getProfile
+            getProfile: getProfile,
+            unsetProfile: unsetProfile
         };
     };
 
@@ -45,7 +47,20 @@ function ProfileService ($localStorage) {
         $localStorage.set('loggedIn', userProfileData.loggedIn);
         $localStorage.set('userId', userProfileData.id);
     }
-    
+
+    /***
+     * Unsets user profile
+     */
+    function unsetProfile () {
+
+        userProfileData = {
+            loggedIn: false
+        };
+
+        $localStorage.set('loggedIn', false);
+        $localStorage.set('userId', null);
+    }
+
     function getProfile() {
         return userProfileData;
     }

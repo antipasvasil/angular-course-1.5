@@ -37,12 +37,12 @@ function RegisterController (UserService, ProfileService, filterBy, $state) {
     vm.initiateRegister = function () {
 
         if( vm.registerForm.$valid && !vm.ui.errors.taken) {
-            console.log('YES');
 
             UserService.registerUser(vm.userData, registrationSuccess, registrationError);
 
         }else {
             console.log('NO');
+            // TODO: focus on first invalid input
         }
     };
 
@@ -70,7 +70,7 @@ function RegisterController (UserService, ProfileService, filterBy, $state) {
     vm.checkUsername = function () {
 
 
-        if(vm.userData.username.length > 5) {
+        if(vm.registerForm.username.$valid) {
 
             if(filterBy(users, vm.userData.username)){
                 vm.ui.errors.taken = true;

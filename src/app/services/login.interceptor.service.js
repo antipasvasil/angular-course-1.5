@@ -1,25 +1,34 @@
 
-loginInterceptor.$inject = [];
+loginInterceptor.$inject = ['SessionService'];
 
     /* @ngInject */
-    function loginInterceptor() {
+    function loginInterceptor(SessionService) {
         return {
             request: function (config) {
-                console.log(config);
+
                 return config;
             },
+
             response: function (response) {
-                console.log(response);
-                var transformResponse = {
+
+                SessionService.setSession(true);
+
+                if(response.config.url.includes('translations')) {
+                    return response;
+                }
+
+                return {
                     data: {
                         result: response.data,
                         status: response.status
                     }
                 };
-                console.log(transformResponse);
-                return transformResponse;
             },
+
             responseError: function (response) {
+
+                SessionService.setSession(true);
+                
                 console.log(response);
                 return response;
             }
